@@ -1,0 +1,120 @@
+{
+    "step_1": [
+        {
+            "header": "How would you best describe your approach to oral care?",
+            "options": {
+                "option_1": {
+                    "type": "button",
+                    "header": "Devoted",
+                    "text": "I brush and floss at lest 2x a day",
+                    "next_step": "step_2"
+                },
+                "option_2": {
+                    "type": "button",
+                    "header": "Simple & Convenient",
+                    "text": "Whatever is easy and saves time",
+                    "next_step": "step_2"
+                },
+                "option_3": {
+                    "type": "button",
+                    "header": "All for the smile",
+                    "text": "I brush, sometimes floss, and have used whitening products",
+                    "next_step": "step_2"
+                }
+            }
+        }
+    ],
+    "step_2": [
+        {
+            "header": "Where will you primarily use your Waterpik™ product?",
+            "options": {
+                "option_1": {
+                    "type": "button",
+                    "header": "At the sink",
+                    "text": "",
+                    "next_step": "sink_path"
+                },
+                "option_2": {
+                    "type": "button",
+                    "header": "In the shower",
+                    "text": "",
+                    "next_step": "shower_path"
+                },
+                "option_3": {
+                    "type": "button",
+                    "header": "On the go",
+                    "text": "",
+                    "next_step": "on_the_go_path"
+                }
+            }
+        }
+    ],
+    "sink_path": [
+        {
+            "header": "Which sink is closest to the one in your home?",
+            "options": {
+                "option_1": {
+                    "type": "button",
+                    "header": "Standard countertop",
+                    "text": "",
+                    "next_step": "information_overview"
+                },
+                "option_2": {
+                    "type": "button",
+                    "header": "Small countertop OR no plug",
+                    "text": "",
+                    "next_step": "information_overview"
+                },
+                "option_3": {
+                    "type": "button",
+                    "header": "A basin with no counter space",
+                    "text": "",
+                    "next_step": "information_overview"
+                }
+            }
+        }
+    ],
+    "shower_path": [
+        {
+            "header": "Do you prefer a rechargeable or battery-operated model?",
+            "options": {
+                "option_1": {
+                    "type": "button",
+                    "header": "Rechargeable",
+                    "text": "",
+                    "next_step": "information_overview"
+                },
+                "option_2": {
+                    "type": "button",
+                    "header": "Battery operated",
+                    "text": "",
+                    "next_step": "information_overview"
+                }
+            }
+        }
+    ],
+    "on_the_go_path": [
+        {
+            "header": "Will you also use this product at home?",
+            "options": {
+                "option_1": {
+                    "type": "button",
+                    "header": "Yes",
+                    "text": "",
+                    "next_step": "information_overview"
+                },
+                "option_2": {
+                    "type": "button",
+                    "header": "No",
+                    "text": "",
+                    "next_step": "information_overview"
+                }
+            }
+        }
+    ],
+    "information_overview": [
+        {
+            "header": "Next up, your personalized recommendation. Everything look alright?"
+        }
+    ]
+}

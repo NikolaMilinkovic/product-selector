@@ -1,0 +1,48 @@
+@import url('../../index.css');
+
+.header-2{
+    font-size: 40px;
+    padding: 60px 0px;
+    text-align: start;
+    margin: 0px;
+}
+.header-1{
+    font-size: 2rem;
+    padding: 2.5rem;
+    text-align: center;
+    margin: 0px;
+}
+.mainContainer{
+    display: flex;
+    flex-direction: column;
+    margin: 10vh 10vw;
+    text-align: center;
+}
+.content{
+    display: grid;
+    grid-template-columns: 1fr 0.7fr;
+    background-color: #F9EAE1;
+    height: 100vh;
+}
+.controls{
+    background-color: var(--accent-color);
+    color: var(--accent-font-color);
+    padding: 10%;
+    position: relative;
+}
+.animation-section{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.options{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+.returnSection{
+    display: flex;
+    position: absolute;
+    bottom: 10%;
+}

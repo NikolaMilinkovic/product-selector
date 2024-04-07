@@ -1,0 +1,11 @@
+@import url('../../index.css');
+
+.progress-container{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.number{
+    position: absolute;
+}
