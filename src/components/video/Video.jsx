@@ -14,7 +14,7 @@ function Video({url = 'dQw4w9WgXcQ', settings}) {
             autoplay: 1,
             modestbranding: 1,
         },
-        volume: 1
+        volume: 10
     }
     const finalSettings = settings || defaultSettings;
 

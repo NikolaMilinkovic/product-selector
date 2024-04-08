@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { v4 as uuid } from 'uuid';
 import style from './product_selector.module.css'
 import ProgressTracker from '../progress_tracker/Progress_tracker';
@@ -8,6 +8,10 @@ import StepsData from './product_selector_data.json'
 import OptionButton from '../button/Option_button';
 import ReturnButton from '../return_button/Return_button';
 import OptionDropdown from '../option_dropdown.jsx/Option_dropdown';
+
+const VideoDisplay = React.memo(() => (
+    <Video/>
+));
 
 function ProductSelector() {
     // Cache last step
@@ -227,7 +231,7 @@ function ProductSelector() {
 
                     {/* VIDEO */}
                     <div className={style.video}>
-                        {/* <Video/> */}
+                        <VideoDisplay/>
                     </div>
                 </div>
             </div>
