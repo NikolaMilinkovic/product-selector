@@ -1,13 +1,15 @@
 @import url('../../index.css');
 
 .dropdown-container{
-
+    display: flex;
+    flex-direction: column;
 }
 .dropdown{
     display: flex;
     width: 100%;
     padding: 20px 20px;
     border-radius: 20px;
+    margin-top: auto;
 }
 .title{
 

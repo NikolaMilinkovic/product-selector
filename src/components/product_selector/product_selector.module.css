@@ -22,7 +22,7 @@
     display: grid;
     grid-template-columns: 1fr 0.7fr;
     background-color: #F9EAE1;
-    height: 100vh;
+    min-height: 100vh;
 }
 .controls{
     background-color: var(--accent-color);
