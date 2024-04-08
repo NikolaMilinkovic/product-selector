@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { v4 as uuid } from 'uuid';
 import style from './option_button.module.css'
 
 function OptionButton(
@@ -12,7 +13,7 @@ function OptionButton(
     
 
     return (
-        <button name={name} type='button' className={style.button} onClick={() => onClick(name)}>
+        <button key={uuid()} name={name} type='button' className={style.button} onClick={() => onClick(name)}>
             <p className={style.header}>{header}</p>
             {text && (
                 <p className={style.text}>{text}</p>

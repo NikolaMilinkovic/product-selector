@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import YouTube from 'react-youtube';
+import { v4 as uuid } from 'uuid';
 import style from './video.module.css'
 
 function Video({url = 'dQw4w9WgXcQ', settings}) {
@@ -29,7 +30,7 @@ function Video({url = 'dQw4w9WgXcQ', settings}) {
     }
 
     return (
-        <div className={style.video}>
+        <div key={uuid()} className={style.video}>
             <YouTube
                 videoId={url} 
                 opts={finalSettings}

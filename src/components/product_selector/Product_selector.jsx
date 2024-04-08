@@ -1,4 +1,6 @@
+/* eslint-disable react/destructuring-assignment */
 import React, { useState, useEffect } from 'react'
+import { v4 as uuid } from 'uuid';
 import style from './product_selector.module.css'
 import ProgressTracker from '../progress_tracker/Progress_tracker';
 import Video from '../video/Video';
@@ -20,23 +22,68 @@ function ProductSelector() {
     // Choices cache
     const [choices, setChoices] = useState([]);
 
-    // Questions with all answers cache
-    const [questionSet, setQuestionSet] = useState([]);
-
     // Display questions preview
     const [displayPreview, setDisplayPreview] = useState(false)
 
-    function updateQuestionSet(data){
-        setQuestionSet(prevSet => [...prevSet, data])
+    // Cache JSON traversal
+    const [renderElements, setRenderElements] = useState([]);
+
+    // Dropdown elements
+    const [dropdownElements, setDropdownElements] = useState();
+
+    function setRenderElementsForDisplay(elements){
+        setRenderElements(elements);
     }
 
-    const handleDropdownChange = (question, selectedAnswer) => {
-        setChoices((prevChoices) =>
-            prevChoices.map((choice) =>
-                choice.question === question ? { ...choice, user_answer: selectedAnswer } : choice
-            )
-        );
-    };
+    // Recursive JSON traversal and dropdown generation
+    function JSONtraversal(step, allChoices, elements=[]){
+
+        const elementsArr = [...elements];
+        setRenderElementsForDisplay(elementsArr);
+        // setChoices(elementsArr);
+
+        // Break je ukoliko vise nemamo opcija
+        if(!step.options){ 
+            return;
+        }
+        // Prolazimo kroz opcije i uporedjujemo sa allChoices
+        
+        const headers = Object.values(step.options).map(option => [option.header, option.next_step]);
+        let match = null;
+
+        for (let i = 0; i < headers.length; i++) {
+            match = allChoices.find(choice => choice.user_answer === headers[i][0])
+            // match = {...match, path: headers[i][1]}
+            if (match) {
+                match.path = headers[i][1];
+                break;
+            }
+        }
+
+        if(match){
+
+            elementsArr.push(match);
+            if(StepsData[match.path] === 'information_overview'){
+                return;
+            }
+            JSONtraversal(StepsData[match.path][0], allChoices, elementsArr)
+            
+        } else {
+            const possibleAnswers = Object.entries(step.options).map(([key, value]) => value.header);
+            match = {...step.options.option_1, 
+                question: step.header,
+                possible_answers: possibleAnswers,
+                path: step.options.option_1.next_step
+            };
+            match = {...match, user_answer: match.header}
+            elementsArr.push(match);
+            setChoices(elementsArr);
+            if(StepsData[match.path] === 'information_overview'){
+                return;
+            }
+            JSONtraversal(match, allChoices, elementsArr)
+        }
+    }
 
     // Case question round
     function nextQuestions(nextStep, answer){
@@ -48,13 +95,10 @@ function ProductSelector() {
             path: nextStep,
             possible_answers: possibleAnswers
         }])
+        
         setLastStep(prevSteps => [...prevSteps, stepData]);
         setStepData(StepsData[nextStep][0]);
         setComponentStep(prevStep => prevStep + 1);
-    }
-    // Case questions overview
-    function infoOverview(){
-        console.log('info overview je na redu!')
     }
 
 
@@ -63,25 +107,24 @@ function ProductSelector() {
         switch(nextStep){
         case 'information_overview':
             nextQuestions(nextStep, answer)
-            displayAnswers()
+            enableInformationOverview()
             break;
         default:
             nextQuestions(nextStep, answer)
         }
     }
-
-
+    //
     useEffect(() => {
-        console.log(choices);
-    }, [choices])
-
+        if(displayPreview === true)
+            JSONtraversal(StepsData.step_1[0], choices);
+    }, [choices, displayPreview] );
+  
     // Returns last step and sets it as current step
     function stepBack(){
         setDisplayPreview(false)
         setStepData(lastStep.pop());
         setComponentStep(prevStep => prevStep - 1);
         choices.pop();
-        console.log(choices);
     }
 
 
@@ -105,68 +148,47 @@ function ProductSelector() {
         return null; // or another default value if there are no options
     };
 
-    // Method for displaying option dropdowns
-    const optionDropdown = () => {
-        if (displayPreview === true) {
-            console.log('Building dropdowns')
-            console.log(choices);
-            let qCount = 0;
+    const handleDropdownChange = (question, selectedAnswer) => {
+        
+        setChoices((prevChoices) =>
+            prevChoices.map((choice) =>
+                choice.question === question ? { ...choice, user_answer: selectedAnswer,   } : choice
+            )
+        );
 
-            return choices.map((set) => {
+
+        // console.log('====================')
+        // console.log('CHOICES:')
+        // console.log(choices)
+        // console.log('RENDER_ELEMENTS:')
+        // console.log(renderElements)
+        // console.log('====================')
+        // JSONtraversal(StepsData.step_1[0], choices)
+    };
+
+    // Method for displaying option dropdowns
+    useEffect(() => {
+
+        if (displayPreview === true) {
+            let qCount = 0;
+            setDropdownElements(renderElements.map((set) => {
                 qCount++
                 return (
                     <OptionDropdown
+                        key={uuid()}
                         question={set.question}
-                        title={`Q${qCount}. ${set.question}`
-                        }
+                        title={`Q${qCount}. ${set.question}`}
                         answers={set.possible_answers}
                         selected={set.user_answer}
                         onChange={handleDropdownChange}
                     />
-                )});
+                )
+            }));
         }
-        return null;
-    };
-    const displayAnswers = () => {
+    }, [renderElements, displayPreview]);
+    const enableInformationOverview = () => {
         setDisplayPreview(true);
-        console.log('setting display to true')
     }
-
-    // NOTE ZA MENE
-    // UZMI PATH, SREDI GA DA BUDE U ODREDJENOM OBLIKU
-    // ZATIM SAMO UPDATE choices SA NOVIN PATHOVIMA
-    // TO CE OPALITI RERENDER I DISPLAY CE SE NOVI DROPDOWN
-    
-
-    // function displayQuestion(currentStep, userAnswers) {
-    //     const stepData = StepsData[currentStep][0];
-    //     const { header, options } = stepData;
-    
-    //     // Find the user's answer for this question
-    //     const userAnswer = userAnswers[header] || '';
-    
-    //     // Check if the user's answer matches any of the options
-    //     const match = Object.entries(options).find(([key, value]) => value.header === userAnswer);
-    
-    //     if (match) {
-    //         // Display OptionDropdown with user's answer
-    //         return <OptionDropdown value={userAnswer} options={Object.values(options).map(option => option.header)} />;
-    //     } 
-    
-    //     // Display OptionDropdown with first option
-    //     const defaultOption = Object.values(options)[0].header;
-    //     return <OptionDropdown value={defaultOption} options={Object.values(options).map(option => option.header)} />;
-        
-    //     // Calculate the nextStep based on the match or default to the first option
-    //     const nextStep = match ? match[1].next_step : Object.values(options)[0].next_step;
-    
-    //     if (nextStep) {
-    //         // Recursive call with next_step
-    //         return displayQuestion(nextStep, userAnswers);
-    //     } 
-    //     return null; // Base case: no next_step
-    // }
-
 
     return (
         <div className={style.mainContainer}>
@@ -189,7 +211,7 @@ function ProductSelector() {
 
                         {/* BUTTON OPTIONS */}
                         {optionButtons()}
-                        {optionDropdown()}
+                        {displayPreview && (dropdownElements)}
                     </div>
                     <div className={style.returnSection}>
 
@@ -205,7 +227,7 @@ function ProductSelector() {
 
                     {/* VIDEO */}
                     <div className={style.video}>
-                        <Video/>
+                        {/* <Video/> */}
                     </div>
                 </div>
             </div>

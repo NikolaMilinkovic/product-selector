@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react'
+import { v4 as uuid } from 'uuid';
 import style from './progress_tracker.module.css'
 
 function ProgressTracker(props) {
@@ -27,6 +28,7 @@ function ProgressTracker(props) {
         <div 
             style={{ width: size, height: size }}
             className={style.progressContainer}
+            key={uuid()}
         >
             <span 
                 className={style.number}
