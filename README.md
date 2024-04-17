@@ -11,5 +11,6 @@ It supports multiple paths, selection history and updates all following answers 
 At the end of selection cycle, component displays to the user the overview of all the answers as last check before accessing the database to retrieve appropriate products.
 
 # Note:
-In this component database querying is not implemented as well as product display.
+Database querying as well as product display is not implemented.
+
 This component is a demo limited to local code execution.
